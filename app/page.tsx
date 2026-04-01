@@ -1,65 +1,172 @@
-import Image from "next/image";
-
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="w-full min-h-screen bg-white text-gray-900">
+
+      {/* HERO */}
+      <section className="w-full px-6 py-24 flex flex-col items-center text-center bg-gradient-to-b from-yellow-300 to-yellow-200">
+        <h1 className="text-4xl md:text-6xl font-bold max-w-4xl leading-tight">
+          Cartas que conectam pessoas, histórias e futuros
+        </h1>
+
+        <p className="mt-6 text-lg md:text-xl max-w-2xl text-gray-800">
+          Tornamos o universo dos jogos de cartas acessível, educativo e presente na vida de quem mais precisa.
+        </p>
+
+        <div className="mt-10 flex flex-wrap justify-center gap-4">
+          <button className="bg-black text-white px-6 py-3 rounded-full hover:opacity-90 transition">
+            Conhecer o projeto
+          </button>
+
+          <button className="border border-black px-6 py-3 rounded-full hover:bg-black hover:text-white transition">
+            Como participar
+          </button>
+        </div>
+
+        <div className="mt-16 w-full max-w-4xl">
+          <img
+            src="/hero.jpg"
+            alt="Cartas e jogo"
+            className="w-full rounded-2xl shadow-md object-cover"
+          />
+        </div>
+
+        {/* MINI STATS */}
+        <div className="mt-14 grid grid-cols-3 gap-6 text-sm">
+          <div>
+            <p className="font-bold text-xl">+500</p>
+            <span className="text-gray-700">Cartas doadas</span>
+          </div>
+          <div>
+            <p className="font-bold text-xl">+120</p>
+            <span className="text-gray-700">Pessoas impactadas</span>
+          </div>
+          <div>
+            <p className="font-bold text-xl">+10</p>
+            <span className="text-gray-700">Projetos ativos</span>
+          </div>
+        </div>
+      </section>
+
+      {/* SOBRE */}
+      <section className="w-full px-6 py-20 flex flex-col items-center text-center">
+        <h2 className="text-3xl md:text-4xl font-bold">
+          Mais do que um jogo
+        </h2>
+
+        <p className="mt-6 max-w-3xl text-lg text-gray-700 leading-relaxed">
+          Utilizamos jogos de cartas como ferramenta de desenvolvimento. Estimulamos raciocínio lógico,
+          tomada de decisão e interação social de forma natural e envolvente.
+        </p>
+
+        <p className="mt-4 max-w-3xl text-lg text-gray-700 leading-relaxed">
+          Levamos essa experiência para escolas, projetos sociais e comunidades que normalmente não teriam acesso.
+        </p>
+      </section>
+
+      {/* IMPACTO */}
+      <section className="w-full px-6 py-20 bg-gray-100">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
+
+          {[
+            { title: "Desenvolvimento", text: "Estimula estratégia, foco e resolução de problemas." },
+            { title: "Social", text: "Fortalece conexões e senso de comunidade." },
+            { title: "Acesso", text: "Leva o TCG para quem nunca teve oportunidade." },
+          ].map((item, i) => (
+            <div key={i} className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition text-center">
+              <h3 className="text-xl font-semibold">{item.title}</h3>
+              <p className="mt-3 text-gray-600">{item.text}</p>
+            </div>
+          ))}
+
+        </div>
+      </section>
+
+      {/* DEPOIMENTOS */}
+      <section className="w-full px-6 py-20">
+        <div className="max-w-5xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold">
+            Quem vive o projeto
+          </h2>
+
+          <div className="mt-12 flex gap-4 overflow-x-auto pb-4">
+            {[
+              "Meu filho passou a se concentrar mais e se comunicar melhor.",
+              "Eles aprendem estratégia e convivência sem perceber.",
+              "Aqui todo mundo se sente parte de algo.",
+              "Um ambiente onde todos se sentem incluídos.",
+            ].map((text, i) => (
+              <div key={i} className="min-w-[260px] p-6 rounded-xl bg-gray-100 hover:bg-gray-200 transition">
+                <p className="text-gray-700">"{text}"</p>
+                <span className="block mt-4 font-semibold text-sm text-gray-600">
+                  Depoimento real
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* PARCEIROS */}
+      <section className="w-full px-6 py-20 bg-gray-50">
+        <div className="max-w-5xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold">
+            Projetos e parcerias
+          </h2>
+
+          <p className="mt-6 text-gray-700 max-w-2xl mx-auto">
+            Conectamos escolas, instituições e comunidades através do TCG.
           </p>
+
+          <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-6">
+            {["Escolas", "Projetos", "ONGs", "Comunidades"].map((item) => (
+              <div key={item} className="h-16 flex items-center justify-center bg-white rounded-lg shadow-sm text-gray-600">
+                {item}
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* COMO FUNCIONA */}
+      <section className="w-full px-6 py-20 bg-white">
+        <div className="max-w-5xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold">
+            Como funciona
+          </h2>
+
+          <div className="mt-12 grid md:grid-cols-3 gap-8">
+
+            {[
+              { title: "Você contribui", text: "Doe cartas ou apoie o projeto." },
+              { title: "Nós conectamos", text: "Organizamos e direcionamos para quem precisa." },
+              { title: "Impacto real", text: "Cartas chegam a escolas e comunidades." },
+            ].map((item, i) => (
+              <div key={i} className="bg-gray-50 p-6 rounded-xl">
+                <div className="text-2xl font-bold mb-3">{i + 1}</div>
+                <h3 className="text-lg font-semibold">{item.title}</h3>
+                <p className="mt-2 text-gray-600">{item.text}</p>
+              </div>
+            ))}
+
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* CTA FINAL */}
+      <section className="w-full px-6 py-24 flex flex-col items-center text-center bg-yellow-100">
+        <h2 className="text-3xl md:text-4xl font-bold">
+          Faça parte disso
+        </h2>
+
+        <p className="mt-6 text-lg max-w-2xl text-gray-700">
+          Você pode ajudar com cartas, apoio ou participação ativa.
+        </p>
+
+        <button className="mt-10 bg-black text-white px-8 py-4 rounded-full font-semibold hover:opacity-90 transition">
+          Quero participar
+        </button>
+      </section>
+
+    </main>
   );
 }
