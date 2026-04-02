@@ -4,13 +4,20 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+type MenuItem = {
+  name: string;
+  href: string;
+  icon: string;
+  badge?: number;
+};
+
 export default function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   const pathname = usePathname();
 
-  const menu = [
+  const menu: MenuItem[] = [
     { name: "Pacotes", href: "/packs", icon: "📦" },
     { name: "Cartas", href: "/cards", icon: "🃏" },
     { name: "Contribuir", href: "/contribuir", icon: "🎁" },
