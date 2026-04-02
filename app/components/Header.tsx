@@ -83,7 +83,7 @@ export default function Header() {
                 <span>{item.icon}</span>
                 {item.name}
 
-                {item.badge > 0 && (
+                {item.badge && item.badge > 0 && (
                   <span className="ml-1 bg-black text-yellow-300 text-[10px] px-1.5 py-0.5 rounded-full">
                     {item.badge}
                   </span>
@@ -131,7 +131,7 @@ export default function Header() {
                   <span>{item.icon}</span>
                   {item.name}
 
-                  {item.badge > 0 && (
+                  {item.badge && item.badge > 0 && (
                     <span className="ml-1 bg-black text-yellow-300 text-[10px] px-1.5 py-0.5 rounded-full">
                       {item.badge}
                     </span>
