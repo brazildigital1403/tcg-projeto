@@ -1,49 +1,66 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname()
+export default function AdminPage() {
+  const [dados, setDados] = useState<any[]>([]);
 
-  const menu = [
-    { name: 'Dashboard', path: '/admin/dashboard' },
-    { name: 'Doações', path: '/admin/doacoes' },
-    { name: 'Recebimentos', path: '/admin/recebimentos' },
-    { name: 'Matches', path: '/admin/matches' },
-    { name: 'Cartas', path: '/admin/cartas' },
-    { name: 'Transações', path: '/admin/transacoes' },
-    { name: 'Usuários', path: '/admin/usuarios' },
-    { name: 'Configurações', path: '/admin/configuracoes' },
-  ]
+  useEffect(() => {
+    async function load() {
+      const { data } = await supabase
+        .from("eventos_funil")
+        .select("*");
+
+      setDados(data || []);
+    }
+
+    load();
+  }, []);
+
+  function contar(evento: string) {
+    return dados.filter((d) => d.evento === evento).length;
+  }
+
+  function contarStep(step: number) {
+    return dados.filter((d) => d.step === step).length;
+  }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
-      
-      {/* Sidebar */}
-      <aside style={{ width: 220, background: '#111', color: '#fff', padding: 20 }}>
-        <h2 style={{ marginBottom: 20 }}>TCG Admin</h2>
+    <div className="min-h-screen p-6 bg-zinc-50 space-y-6">
 
-        {menu.map((item) => (
-          <Link key={item.path} href={item.path}>
-            <div
-              style={{
-                padding: '10px 0',
-                cursor: 'pointer',
-                opacity: pathname === item.path ? 1 : 0.6,
-                fontWeight: pathname === item.path ? 'bold' : 'normal'
-              }}
-            >
-              {item.name}
-            </div>
-          </Link>
-        ))}
-      </aside>
+      <h1 className="text-2xl font-semibold">
+        Dashboard do Funil
+      </h1>
 
-      {/* Content */}
-      <main style={{ flex: 1, padding: 20 }}>
-        {children}
-      </main>
+      {/* FUNIL */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+        <Card title="Step 1" value={contarStep(1)} />
+        <Card title="Step 2" value={contarStep(2)} />
+        <Card title="Step 3" value={contarStep(3)} />
+        <Card title="Step 4" value={contarStep(4)} />
+
+      </div>
+
+      {/* EVENTOS */}
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+
+        <Card title="Doação" value={contar("tipo_doacao")} />
+        <Card title="Venda" value={contar("tipo_venda")} />
+        <Card title="Finalizou" value={contar("finalizou")} />
+
+      </div>
+
     </div>
-  )
+  );
+}
+
+function Card({ title, value }: any) {
+  return (
+    <div className="bg-white p-4 rounded-xl shadow">
+      <p className="text-sm text-zinc-500">{title}</p>
+      <p className="text-2xl font-semibold">{value}</p>
+    </div>
+  );
 }

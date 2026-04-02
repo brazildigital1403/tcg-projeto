@@ -92,7 +92,7 @@ export default function Header() {
             );
           })}
           <Link
-            href="/admin/dashboard"
+            href="/admin"
             className="ml-2 px-4 py-1.5 rounded-full text-sm border-2 flex items-center gap-1 transition active:scale-95 bg-black text-yellow-300 border-black shadow"
           >
             ⚙️ Admin

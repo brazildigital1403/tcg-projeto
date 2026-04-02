@@ -1,4 +1,24 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import { supabase } from '@/lib/supabase'
+import Link from 'next/link'
+
 export default function Home() {
+  const [testimonials, setTestimonials] = useState<any[]>([])
+
+  useEffect(() => {
+    fetchTestimonials()
+  }, [])
+
+  async function fetchTestimonials() {
+    const { data } = await supabase
+      .from('testimonials')
+      .select('*')
+      .order('created_at', { ascending: false })
+
+    setTestimonials(data || [])
+  }
   return (
     <main className="w-full min-h-screen bg-white text-gray-900">
 
@@ -13,13 +33,12 @@ export default function Home() {
         </p>
 
         <div className="mt-10 flex flex-wrap justify-center gap-4">
-          <button className="bg-black text-white px-6 py-3 rounded-full hover:opacity-90 transition">
+          <Link href="/conhecer" className="bg-black text-white px-6 py-3 rounded-full hover:opacity-90 transition inline-block">
             Conhecer o projeto
-          </button>
-
-          <button className="border border-black px-6 py-3 rounded-full hover:bg-black hover:text-white transition">
+          </Link>
+          <Link href="/participar" className="border border-black px-6 py-3 rounded-full hover:bg-black hover:text-white transition inline-block">
             Como participar
-          </button>
+          </Link>
         </div>
 
         <div className="mt-16 w-full max-w-4xl">
@@ -89,17 +108,23 @@ export default function Home() {
           </h2>
 
           <div className="mt-12 flex gap-4 overflow-x-auto pb-4">
-            {[
-              "Meu filho passou a se concentrar mais e se comunicar melhor.",
-              "Eles aprendem estratégia e convivência sem perceber.",
-              "Aqui todo mundo se sente parte de algo.",
-              "Um ambiente onde todos se sentem incluídos.",
-            ].map((text, i) => (
-              <div key={i} className="min-w-[260px] p-6 rounded-xl bg-gray-100 hover:bg-gray-200 transition">
-                <p className="text-gray-700">"{text}"</p>
-                <span className="block mt-4 font-semibold text-sm text-gray-600">
-                  Depoimento real
-                </span>
+            {testimonials.map((item, i) => (
+              <div key={i} className="min-w-[280px] p-6 rounded-xl bg-white shadow-sm hover:shadow-md transition text-left">
+    
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center text-sm font-semibold">
+                    {item.initial}
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-900">{item.author}</p>
+                    <span className="text-xs text-gray-500">{item.role}</span>
+                  </div>
+                </div>
+
+                <p className="text-gray-700 text-sm leading-relaxed">
+                  "{item.text}"
+                </p>
+
               </div>
             ))}
           </div>
@@ -162,9 +187,9 @@ export default function Home() {
           Você pode ajudar com cartas, apoio ou participação ativa.
         </p>
 
-        <button className="mt-10 bg-black text-white px-8 py-4 rounded-full font-semibold hover:opacity-90 transition">
+        <Link href="/participar" className="mt-10 bg-black text-white px-8 py-4 rounded-full font-semibold hover:opacity-90 transition inline-block">
           Quero participar
-        </button>
+        </Link>
       </section>
 
     </main>

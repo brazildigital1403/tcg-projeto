@@ -13,6 +13,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { name: 'Matches', path: '/admin/matches' },
     { name: 'Cartas', path: '/admin/cartas' },
     { name: 'Transações', path: '/admin/transacoes' },
+    { name: 'Depoimentos', path: '/admin/depoimentos' },
     { name: 'Usuários', path: '/admin/usuarios' },
     { name: 'Configurações', path: '/admin/configuracoes' },
   ]
