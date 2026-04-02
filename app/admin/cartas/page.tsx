@@ -110,7 +110,6 @@ export default function CartasAdmin() {
         nome: newName,
         raridade: newRarity,
         imagem: imageUrl,
-        quantidade: 0,
       });
 
       setNewName("");
