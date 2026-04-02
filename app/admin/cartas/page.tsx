@@ -264,7 +264,7 @@ export default function CartasAdmin() {
 
       <div style={styles.filterGrid}>
 
-        {/* BUSCA */}
+        {/* BUSCAS */}
         <input
           placeholder="Buscar carta..."
           value={searchInput}
