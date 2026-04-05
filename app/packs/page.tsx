@@ -6,10 +6,12 @@ import { supabase } from '@/lib/supabase'
 import PackGallery from './[id]/PackGallery'
 
 export default function Pacotes() {
-  const [Pacotes, setPacotes] = useState<any[]>([])
+  const [pacotes, setPacotes] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
   const [selectedPack, setSelectedPack] = useState<any>(null)
   const [reviews, setReviews] = useState<any[]>([])
   const [showAllReviews, setShowAllReviews] = useState(false)
+  const [viewingCount] = useState(Math.floor(Math.random() * 5) + 3)
 
   const [nome, setNome] = useState('')
   const [nota, setNota] = useState(5)
@@ -18,8 +20,17 @@ export default function Pacotes() {
 
   useEffect(() => {
     async function load() {
-      const { data } = await supabase.from('Pacotes').select('*')
-      setPacotes(data || [])
+      setLoading(true)
+      const { data, error } = await supabase.from('packs').select('*')
+
+      if (error) {
+        console.error('Erro ao carregar packs:', error)
+        setPacotes([])
+      } else {
+        setPacotes(data || [])
+        console.log('PACKS:', data)
+      }
+      setLoading(false)
     }
     load()
   }, [])
@@ -65,6 +76,14 @@ export default function Pacotes() {
     ? reviews
     : reviews.slice(0, 3)
 
+  function formatRegras(regras: any) {
+    if (!regras) return ''
+
+    return Object.entries(regras)
+      .map(([raridade, qtd]) => `${qtd} ${raridade}`)
+      .join(' • ')
+  }
+
   async function enviarReview() {
     if (!nome || !comentario) return
 
@@ -103,34 +122,44 @@ export default function Pacotes() {
 
         {/* GRID */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-          {Pacotes.map((pack) => (
-            <motion.div
-              key={pack.id}
-              layoutId={`card-${pack.id}`}
-              onClick={() => setSelectedPack(pack)}
-              className="relative cursor-pointer bg-white rounded-xl shadow-sm hover:shadow-md transition p-3 md:p-4"
-            >
-
-              {pack.mais_vendido && (
-                <div className="absolute top-2 left-2 bg-black text-white text-xs px-2 py-1 rounded">
-                  🔥 Mais vendido
-                </div>
-              )}
-
+          {loading ? (
+            <p className="col-span-full text-center text-zinc-500">Carregando packs...</p>
+          ) : pacotes.length === 0 ? (
+            <p className="col-span-full text-center text-zinc-400">Nenhum pack encontrado</p>
+          ) : (
+            pacotes.map((pack) => (
               <motion.div
-                layoutId={`image-${pack.id}`}
-                className="w-full h-32 md:h-40 bg-zinc-100 rounded-lg mb-3 flex items-center justify-center overflow-hidden"
+                key={pack.id}
+                layoutId={`card-${pack.id}`}
+                onClick={() => setSelectedPack(pack)}
+                className="relative cursor-pointer bg-white rounded-xl shadow-sm hover:shadow-md transition p-3 md:p-4 border border-zinc-100"
               >
-                {pack.imagens?.[0] && (
-                  <img src={pack.imagens[0]} className="max-h-full object-contain" />
-                )}
-              </motion.div>
 
-              <h2 className="text-sm md:text-lg font-medium">{pack.nome}</h2>
-              <p className="text-xs text-zinc-500">{pack.quantidade_cartas} cartas</p>
-              <p className="font-semibold mt-2">R$ {pack.preco}</p>
-            </motion.div>
-          ))}
+                {pack.mais_vendido && (
+                  <div className="absolute top-2 left-2 bg-black text-white text-xs px-2 py-1 rounded">
+                    🔥 Mais vendido
+                  </div>
+                )}
+
+                <motion.div
+                  layoutId={`image-${pack.id}`}
+                  className="w-full h-32 md:h-40 bg-zinc-100 rounded-lg mb-3 flex items-center justify-center overflow-hidden"
+                >
+                  {pack.imagens?.[0] ? (
+                    <img src={pack.imagens[0]} className="max-h-full object-contain" />
+                  ) : (
+                    <span className="text-xs text-zinc-400">Sem imagem</span>
+                  )}
+                </motion.div>
+
+                <h2 className="text-sm md:text-lg font-medium">{pack.nome}</h2>
+                <p className="text-xs text-zinc-500">
+                  {formatRegras(pack.config_regras) || `${pack.quantidade_cartas} cartas`}
+                </p>
+                <p className="font-semibold mt-2">R$ {Number(pack.preco).toFixed(2)}</p>
+              </motion.div>
+            ))
+          )}
         </div>
 
         {/* MODAL */}
@@ -146,7 +175,7 @@ export default function Pacotes() {
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 80, opacity: 0 }}
         transition={{ type: 'spring', stiffness: 120, damping: 20 }}
-        className="bg-white w-full md:max-w-5xl h-[100dvh] md:h-[90vh] rounded-t-2xl md:rounded-xl overflow-hidden flex flex-col relative"
+        className="bg-white w-full md:max-w-5xl h-[95vh] md:h-[90vh] rounded-t-2xl md:rounded-xl overflow-hidden flex flex-col relative"
         onClick={(e) => e.stopPropagation()}
       >
 
@@ -181,6 +210,7 @@ export default function Pacotes() {
             <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
 
               <div>
+                <p className="text-xs text-zinc-400 uppercase mb-1">Pack</p>
                 <h1 className="text-2xl font-semibold">
                   {selectedPack.nome}
                 </h1>
@@ -196,19 +226,21 @@ export default function Pacotes() {
                 </p>
 
                 <p className="text-sm mt-2 text-zinc-500">
-                  {selectedPack.quantidade_cartas} cartas
+                  {formatRegras(selectedPack.config_regras) || `${selectedPack.quantidade_cartas} cartas`}
                 </p>
 
                 <p className="text-2xl font-bold mt-4">
-                  R$ {selectedPack.preco}
+                  R$ {Number(selectedPack.preco).toFixed(2)}
                 </p>
 
-                <p className="text-red-500 text-sm mt-2">
-                  Restam apenas {selectedPack.estoque} unidades
-                </p>
+                {selectedPack.estoque > 0 && (
+                  <p className="text-red-500 text-sm mt-2">
+                    Restam apenas {selectedPack.estoque} unidades
+                  </p>
+                )}
 
                 <p className="text-xs text-zinc-500">
-                  {Math.floor(Math.random() * 5) + 3} pessoas vendo agora
+                  {viewingCount} pessoas vendo agora
                 </p>
               </div>
 
